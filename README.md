@@ -1,8 +1,7 @@
-# icestick_spinalHDL_template
-A template for starting a spinalHDL project targeted at the Lattice icestick FPGA.
+# icestick_spinalHDL_pwmAudio_V2
+Home of the AudioChip V2. Made for an Lattice IceStick FPGA, adaptable for ASIC microchips.
 
 ### Create Verilog from spinalHDL
-
 ```
 cd spinalHDL
 sbt "runMain MyImplementation"
