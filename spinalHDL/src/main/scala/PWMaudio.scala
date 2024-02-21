@@ -10,10 +10,10 @@ class PWMaudio extends Component{
         val pwm_1 = out Bool()
         val pwm_2 = out Bool()
         val frequency = in Bits(12 bits)
-        val note_length = in Bits(3 bits)
+        // val note_length = in Bits(3 bits)
         val adsr_switch = in Bool()
-        val loop = in Bool()
-        val trigger = in Bool()
+        // val loop = in Bool()
+        // val trigger = in Bool()
         val adsr_choice = in Bits(3 bits)
     }
 
@@ -74,7 +74,7 @@ class PWMaudio extends Component{
     }
 
     val pwm_ctrl = new PWMctrl(8)
-    val note_length = U(io.note_length)
+    // val note_length = U(io.note_length)
 
     io.pwm_1 := pwm_ctrl.io.pwm_1
     io.pwm_2 := pwm_ctrl.io.pwm_2
@@ -92,20 +92,22 @@ class PWMaudio extends Component{
 
         val stateEntry : State = new State with EntryPoint{
             whenIsActive {
-                when(io.loop) {
-                    goto(stateAttack)
-                } otherwise {
-                    when(!io.trigger) {
-                        goto(stateAttack)
-                    }
-                }
+                goto(stateAttack)
+                // when(io.loop) {
+                //    goto(stateAttack)
+                // } otherwise {
+                //    when(!io.trigger) {
+                //        goto(stateAttack)
+                //    }
+                // }
             }
         }
         val stateAttack : State = new State{
             onEntry(counter := 0)
             whenIsActive {
                 counter := counter + 1
-                when(counter >= adsr1 * (note_length * 2 )){
+                // when(counter >= adsr1 * (note_length * 2 )){
+                when(counter >= adsr1){
                     level_adsr := level_adsr + 1
                     counter := 0
                 }
@@ -118,7 +120,8 @@ class PWMaudio extends Component{
             onEntry(counter := 0)
             whenIsActive {
                 counter := counter + 1
-                when(counter >= adsr2 * note_length * 2){
+                // when(counter >= adsr2 * note_length * 2){
+                when(counter >= adsr2){
                     level_adsr := level_adsr - 1
                     counter := 0
                 }
@@ -132,7 +135,8 @@ class PWMaudio extends Component{
             whenIsActive {
                 counter := counter + 1
                 level_adsr := 127
-                when(counter >= adsr3 * note_length * 2){
+                // when(counter >= adsr3 * note_length * 2){
+                when(counter >= adsr3){
                     goto(stateRelease)
                 }
             }
@@ -141,7 +145,8 @@ class PWMaudio extends Component{
             onEntry(counter := 0)
             whenIsActive {
                 counter := counter + 1
-                when(counter >= adsr4 * note_length * 2){
+                // when(counter >= adsr4 * note_length * 2){
+                when(counter >= adsr4){
                     level_adsr := level_adsr - 1
                     counter := 0
                 }
